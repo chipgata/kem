@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180412043426) do
+ActiveRecord::Schema.define(version: 20180416071818) do
 
   create_table "bases", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -25,6 +25,25 @@ ActiveRecord::Schema.define(version: 20180412043426) do
     t.integer "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "endpoints", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "port"
+    t.string "part"
+    t.string "status"
+    t.string "check_protocol"
+    t.integer "response_timeout"
+    t.integer "check_interval"
+    t.integer "unhealthy_threshold"
+    t.integer "healthy_threshold"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "category_id"
+    t.index ["category_id"], name: "index_endpoints_on_category_id"
   end
 
   create_table "users", force: :cascade do |t|

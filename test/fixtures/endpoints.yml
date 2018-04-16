@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  port: 
+  part: MyString
+  status: MyString
+  check_protocol: MyString
+  response_timeout: 
+  check_interval: 1
+  unhealthy_threshold: 
+  healthy_threshold: 
+
+two:
+  name: MyString
+  description: MyText
+  port: 
+  part: MyString
+  status: MyString
+  check_protocol: MyString
+  response_timeout: 
+  check_interval: 1
+  unhealthy_threshold: 
+  healthy_threshold: 

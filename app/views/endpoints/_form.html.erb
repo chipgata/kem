@@ -1,0 +1,74 @@
+<%= form_with model: @endpoint, local: true do |form| %>
+ 
+  <% if @endpoint.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@endpoint.errors.count, "error") %> prohibited
+        this endpoint from being saved:
+      </h2>
+      <ul>
+        <% @endpoint.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <p>
+    <%= form.label :category_id %><br>
+    <%= form.collection_select(:category_id, Category.all, :id, :name) %>
+  </p>
+
+  <p>
+    <%= form.label :name %><br>
+    <%= form.text_field :name %>
+  </p>
+ 
+  <p>
+    <%= form.label :description %><br>
+    <%= form.text_area :description %>
+  </p>
+
+  <p>
+    <%= form.label :status %><br>
+    <%= form.select(:status) do %>
+      <% [['OK', 'OK'], ['FAIL', 'FAIL'], ['UNKNOW', 'UNKNOW']].each do |c| -%>
+        <%= content_tag(:option, c.first, value: c.last) %>
+      <% end %>
+    <% end %>
+  </p>
+
+  <p>
+    <%= form.label :check_protocol %><br>
+    <%= form.select(:check_protocol) do %>
+      <% [['PING', 'ping'], ['HTTP', 'http'], ['HTTPS', 'https'], ['SSL/TLS', 'ssl']].each do |c| -%>
+        <%= content_tag(:option, c.first, value: c.last) %>
+      <% end %>
+    <% end %>
+  </p>
+
+  <p>
+    <%= form.label :response_timeout %><br>
+    <%= form.text_field :response_timeout %>
+  </p>
+
+  <p>
+    <%= form.label :check_interval %><br>
+    <%= form.text_field :check_interval %>
+  </p>
+
+  <p>
+    <%= form.label :unhealthy_threshold %><br>
+    <%= form.text_field :unhealthy_threshold %>
+  </p>
+  
+  <p>
+    <%= form.label :healthy_threshold %><br>
+    <%= form.text_field :healthy_threshold %>
+  </p>
+
+  <p>
+    <%= form.submit %>
+  </p>
+ 
+<% end %>
