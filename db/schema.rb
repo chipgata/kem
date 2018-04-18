@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180416071818) do
+ActiveRecord::Schema.define(version: 20180417160357) do
 
   create_table "bases", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -27,11 +27,30 @@ ActiveRecord::Schema.define(version: 20180416071818) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "check_infos", force: :cascade do |t|
+    t.integer "endpoint_id", null: false
+    t.integer "unhealthy_count"
+    t.integer "healthy_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["endpoint_id"], name: "index_check_infos_on_endpoint_id"
+  end
+
+  create_table "crono_jobs", force: :cascade do |t|
+    t.string "job_id", null: false
+    t.text "log", limit: 1073741823
+    t.datetime "last_performed_at"
+    t.boolean "healthy"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_crono_jobs_on_job_id", unique: true
+  end
+
   create_table "endpoints", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.integer "port"
-    t.string "part"
+    t.string "path"
     t.string "status"
     t.string "check_protocol"
     t.integer "response_timeout"
@@ -43,7 +62,29 @@ ActiveRecord::Schema.define(version: 20180416071818) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "category_id"
+    t.string "check_status"
+    t.datetime "last_check"
+    t.datetime "next_check"
     t.index ["category_id"], name: "index_endpoints_on_category_id"
+  end
+
+  create_table "event_store_events", id: :string, limit: 36, force: :cascade do |t|
+    t.string "event_type", null: false
+    t.text "metadata"
+    t.text "data", null: false
+    t.datetime "created_at", null: false
+    t.index ["created_at"], name: "index_event_store_events_on_created_at"
+    t.index ["id"], name: "sqlite_autoindex_event_store_events_1", unique: true
+  end
+
+  create_table "event_store_events_in_streams", force: :cascade do |t|
+    t.string "stream", null: false
+    t.integer "position"
+    t.string "event_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["created_at"], name: "index_event_store_events_in_streams_on_created_at"
+    t.index ["stream", "event_id"], name: "index_event_store_events_in_streams_on_stream_and_event_id", unique: true
+    t.index ["stream", "position"], name: "index_event_store_events_in_streams_on_stream_and_position", unique: true
   end
 
   create_table "users", force: :cascade do |t|

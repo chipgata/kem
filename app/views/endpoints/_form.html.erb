@@ -30,21 +30,30 @@
   </p>
 
   <p>
+    <%= form.label :path %><br>
+    <%= form.text_field :path %>
+  </p>
+
+  <p>
+    <%= form.label :port %><br>
+    <%= form.text_field :port %>
+  </p>
+
+  <p>
     <%= form.label :status %><br>
-    <%= form.select(:status) do %>
-      <% [['OK', 'OK'], ['FAIL', 'FAIL'], ['UNKNOW', 'UNKNOW']].each do |c| -%>
-        <%= content_tag(:option, c.first, value: c.last) %>
-      <% end %>
-    <% end %>
+    <%= form.select(:status, [['ACTIVE', 'ACTIVE'], ['DEACTIVE', 'DEACTIVE']]) %>
+  </p>
+
+  
+
+  <p>
+    <%= form.label :check_status %><br>
+    <%= form.select(:check_status, [['OK', 'OK'], ['FAIL', 'FAIL'], ['UNKNOW', 'UNKNOW']]) %>
   </p>
 
   <p>
     <%= form.label :check_protocol %><br>
-    <%= form.select(:check_protocol) do %>
-      <% [['PING', 'ping'], ['HTTP', 'http'], ['HTTPS', 'https'], ['SSL/TLS', 'ssl']].each do |c| -%>
-        <%= content_tag(:option, c.first, value: c.last) %>
-      <% end %>
-    <% end %>
+    <%= form.select(:check_protocol, [['PING', 'ping'], ['HTTP', 'http'], ['HTTPS', 'https'], ['SSL/TLS', 'ssl']]) %>
   </p>
 
   <p>

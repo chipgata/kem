@@ -4,7 +4,7 @@ class CreateEndpoints < ActiveRecord::Migration[5.1]
       t.string :name
       t.text :description
       t.integer :port
-      t.string :part
+      t.string :path
       t.string :status
       t.string :check_protocol
       t.integer :response_timeout

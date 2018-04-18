@@ -54,3 +54,8 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise'
+gem 'crono'
+gem 'log4r'
+gem "rails_event_store"
+gem 'redis'
+gem 'jquery-rails'
