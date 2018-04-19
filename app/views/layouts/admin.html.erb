@@ -88,19 +88,19 @@
         <nav class="sidebar-nav">
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              
+              <%= link_to(root_path, class: "nav-link", "data-turbolinks": "false") do %>
                 <i class="nav-icon icon-speedometer"></i> Dashboard
-                <span class="badge badge-primary">NEW</span>
-              </a>
+              <% end %>
             </li>
             <li class="nav-title">Management</li>
             <li class="nav-item">
-              <%= link_to(categories_path, class: "nav-link") do %>
+              <%= link_to(categories_path, class: "nav-link", "data-turbolinks": "false") do %>
                 <i class="nav-icon icon-drop"></i> Category</a>
               <% end %>
             </li>
             <li class="nav-item">
-                <%= link_to(endpoints_path, class: "nav-link") do %>
+                <%= link_to(endpoints_path, class: "nav-link", "data-turbolinks": "false") do %>
                 <i class="nav-icon icon-pencil"></i> Endpoint</a>
               <% end %>
             </li>
@@ -436,12 +436,12 @@
       </div>
     </footer>
     <!-- Bootstrap and necessary plugins-->
-    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="/node_modules/popper.js/dist/umd/popper.min.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/node_modules/pace-progress/pace.min.js"></script>
-    <script src="/node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
-    <script src="/node_modules/@coreui/coreui/dist/js/coreui.min.js"></script>
-    
+    <script>
+      $(document).on('turbolinks:load', ready); 
+      var ready = function() {
+          //console.log(1);
+          //$.Sidebar();
+      };
+    </script>
   </body>
 </html>
