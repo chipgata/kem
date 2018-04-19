@@ -1,83 +1,132 @@
-<%= form_with model: @endpoint, local: true do |form| %>
- 
-  <% if @endpoint.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@endpoint.errors.count, "error") %> prohibited
-        this endpoint from being saved:
-      </h2>
-      <ul>
-        <% @endpoint.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-  
-  <p>
-    <%= form.label :category_id %><br>
-    <%= form.collection_select(:category_id, Category.all, :id, :name) %>
-  </p>
+<div class="row ">
+    <div class="col-lg-12 ">
+      <div class="card ">
+        <div class="card-header ">
+          <i class="fa fa-edit "></i><%= form_name %>
+          
+        </div>
+        <div class="card-body collapse show " id="collapseExample ">
+          <% if @endpoint.errors.any? %>
+            <div id="error_explanation">
+              <ul>
+                <% @endpoint.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <%= form_with model: @endpoint, class: "form-horizontal ", local: true do |form| %>
+            <div class="form-group ">
+              <%= form.label :category_id, class: "col-form-label ", for: "prependedInput" %>
+              <div class="controls ">
+                <div class="input-prepend input-group "> 
+                  <%= form.collection_select(:category_id, Category.all, :id, :name, {}, {:class => "form-control "}) %>
+                </div>
+                
+              </div>
+            </div>
+            <div class="form-group ">
+            
+               <%= form.label :name, class: "col-form-label ", for: "appendedInput " %><br>
+    
+              <div class="controls ">
+                <div class="input-group ">
+                  <%= form.text_field :name, id: "appendedInput", class: "form-control " %>
+                  
+                </div>
+                
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :description, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+            
+              <div class="controls ">
+                <div class="input-prepend input-group ">
+                  
+                  <%= form.text_area :description, id: "appendedPrependedInput ", class: "form-control " %>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :path, class: "col-form-label " %><br>
+              <div class="controls ">
+                <div class="input-group ">
+                  <%= form.text_field :path, class: "form-control " %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :port, class: "col-form-label " %><br>
+              <div class="controls ">
+                <div class="input-group ">
+                  <%= form.text_field :port, class: "form-control " %>
+                </div>
+              </div>
+            </div>
 
-  <p>
-    <%= form.label :name %><br>
-    <%= form.text_field :name %>
-  </p>
- 
-  <p>
-    <%= form.label :description %><br>
-    <%= form.text_area :description %>
-  </p>
-
-  <p>
-    <%= form.label :path %><br>
-    <%= form.text_field :path %>
-  </p>
-
-  <p>
-    <%= form.label :port %><br>
-    <%= form.text_field :port %>
-  </p>
-
-  <p>
-    <%= form.label :status %><br>
-    <%= form.select(:status, [['ACTIVE', 'ACTIVE'], ['DEACTIVE', 'DEACTIVE']]) %>
-  </p>
-
-  
-
-  <p>
-    <%= form.label :check_status %><br>
-    <%= form.select(:check_status, [['OK', 'OK'], ['FAIL', 'FAIL'], ['UNKNOW', 'UNKNOW']]) %>
-  </p>
-
-  <p>
-    <%= form.label :check_protocol %><br>
-    <%= form.select(:check_protocol, [['PING', 'ping'], ['HTTP', 'http'], ['HTTPS', 'https'], ['SSL/TLS', 'ssl']]) %>
-  </p>
-
-  <p>
-    <%= form.label :response_timeout %><br>
-    <%= form.text_field :response_timeout %>
-  </p>
-
-  <p>
-    <%= form.label :check_interval %><br>
-    <%= form.text_field :check_interval %>
-  </p>
-
-  <p>
-    <%= form.label :unhealthy_threshold %><br>
-    <%= form.text_field :unhealthy_threshold %>
-  </p>
-  
-  <p>
-    <%= form.label :healthy_threshold %><br>
-    <%= form.text_field :healthy_threshold %>
-  </p>
-
-  <p>
-    <%= form.submit %>
-  </p>
- 
-<% end %>
+            <div class="form-group ">
+              <%= form.label :status, class: "col-form-label ", for: "prependedInput" %>
+              <div class="controls ">
+                <div class="input-prepend input-group "> 
+                  <%= form.select(:status, [['ACTIVE', 'ACTIVE'], ['DEACTIVE', 'DEACTIVE']], {}, {:class => "form-control "}) %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :check_status, class: "col-form-label " %>
+              <div class="controls ">
+                <div class="input-prepend input-group "> 
+                  <%= form.select(:check_status, [['OK', 'OK'], ['FAIL', 'FAIL'], ['UNKNOW', 'UNKNOW']], {}, {:class => "form-control "}) %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :check_protocol, class: "col-form-label " %>
+              <div class="controls ">
+                <div class="input-prepend input-group "> 
+                  <%= form.select(:check_protocol, [['PING', 'ping'], ['HTTP', 'http'], ['HTTPS', 'https'], ['SSL', 'ssl']], {}, {:class => "form-control "}) %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :response_timeout, class: "col-form-label " %><br>
+              <div class="controls ">
+                <div class="input-group ">
+                  <%= form.text_field :response_timeout, class: "form-control " %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :check_interval, class: "col-form-label " %><br>
+              <div class="controls ">
+                <div class="input-group ">
+                  <%= form.text_field :check_interval, class: "form-control " %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :unhealthy_threshold, class: "col-form-label " %><br>
+              <div class="controls ">
+                <div class="input-group ">
+                  <%= form.text_field :unhealthy_threshold, class: "form-control " %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <%= form.label :healthy_threshold, class: "col-form-label " %><br>
+              <div class="controls ">
+                <div class="input-group ">
+                  <%= form.text_field :healthy_threshold, class: "form-control " %>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions ">
+              <%= form.submit "Save changes", class: "btn btn-primary " %>
+              <%= link_to 'Cancel', endpoints_path , class: "btn btn-secondary " %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div><!--/.col-->
+  </div><!--/.row-->

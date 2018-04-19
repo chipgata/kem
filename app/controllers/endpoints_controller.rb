@@ -27,7 +27,7 @@ class EndpointsController < ApplicationController
             @check_info.healthy_count = 0
 
             @check_info.save
-            redirect_to @endpoint
+            redirect_to endpoints_path
         else
             render 'new'
         end
@@ -37,7 +37,7 @@ class EndpointsController < ApplicationController
         @endpoint = Endpoint.find(params[:id])
        
         if @endpoint.update(endpoint_params)
-          redirect_to @endpoint
+          redirect_to endpoints_path
         else
           render 'edit'
         end
