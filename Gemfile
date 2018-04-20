@@ -62,4 +62,5 @@ gem 'redis-namespace'
 gem 'redis-rails'
 gem 'redis-rack-cache'
 gem 'faraday'
+gem 'ssl-test'
 

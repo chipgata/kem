@@ -71,7 +71,13 @@ class CheckJob < ApplicationJob
   end
 
   def ssl_check(path, port, timeout)
-    
+    valid, error, cert = SSLTest.test "https://" + path + ':' + port.to_s, open_timeout: timeout, read_timeout: timeout
+    if valid
+      true
+    else
+      puts error
+      false
+    end
   end
 
   def check_process(endpoint)
