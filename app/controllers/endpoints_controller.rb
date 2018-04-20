@@ -17,16 +17,6 @@ class EndpointsController < ApplicationController
     def create
         @endpoint = Endpoint.new(endpoint_params) 
         if @endpoint.save
-            #event = Endpointed.new(data: @endpoint)
-            #Rails.configuration.event_store.publish_event(event)
-            #ActionCable.server.broadcast 'endpoint_check', data: @endpoint
-
-            @check_info = CheckInfo.new
-            @check_info.endpoint_id = @endpoint.id
-            @check_info.unhealthy_count = 0
-            @check_info.healthy_count = 0
-
-            @check_info.save
             redirect_to endpoints_path
         else
             render 'new'

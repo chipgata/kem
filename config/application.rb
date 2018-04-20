@@ -22,5 +22,7 @@ module KeysEndpointMonitoring
       Devise::UnlocksController.layout "auth"
       Devise::PasswordsController.layout "auth"
     end
+
+    config.cache_store = :redis_store, 'redis://localhost:6379/0/cache', {expires_in: 90.days}
   end
 end

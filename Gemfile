@@ -58,4 +58,7 @@ gem 'crono'
 gem 'log4r'
 gem "rails_event_store"
 gem 'redis'
-gem 'jquery-rails'
+gem 'redis-namespace'
+gem 'redis-rails'
+gem 'redis-rack-cache'
+
