@@ -27,12 +27,51 @@ class CheckJob < ApplicationJob
   end
 
   def http_check(path, port, timeout)
+    begin
+      conn = Faraday.new 'http://' + path + ':' + port.to_s do |conn|
+        conn.options[:open_timeout] = timeout
+        conn.options[:timeout] = timeout
+        conn.adapter Faraday.default_adapter
+      end
+
+      response = conn.get('/')
+      if response.status == 200
+        true
+      else
+        false
+      end
+
+      rescue  => e
+        logger.debug e
+        puts e
+        false
+    end
   end
 
   def https_check(path, port, timeout)
+    begin
+      conn = Faraday.new 'https://' + path + ':' + port.to_s do |conn|
+        conn.options[:open_timeout] = timeout
+        conn.options[:timeout] = timeout
+        conn.adapter Faraday.default_adapter
+      end
+
+      response = conn.get('/')
+      if response.status == 200
+        true
+      else
+        false
+      end
+
+      rescue  => e
+        logger.debug e
+        puts e
+        false
+    end
   end
 
   def ssl_check(path, port, timeout)
+    
   end
 
   def check_process(endpoint)
