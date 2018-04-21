@@ -63,4 +63,7 @@ gem 'redis-rails'
 gem 'redis-rack-cache'
 gem 'faraday'
 gem 'ssl-test'
-
+gem 'resque'
+gem 'resque-scheduler'
+gem 'slack-notifier'
+gem 'dingbot'
