@@ -21,7 +21,7 @@
           <tbody>
           <% @categories.each do |category| %>
             <tr>
-              <td class="text-center"></td>
+              <td class="text-center"><%= category.category.presence ? category.category.name : '' %></td>
               <td class="text-center"><%= category.name %></td>
               <td class="text-center"><%= category.description %></td>
               <td class="text-center"><%= category.created_at %></td>
