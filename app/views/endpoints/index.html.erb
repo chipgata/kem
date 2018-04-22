@@ -15,6 +15,8 @@
               <th class="text-center">Status</th>
               <th class="text-center">Created At</th>
               <th class="text-center">Updated At</th>
+              <th class="text-center">Created By</th>
+              <th class="text-center">Updated By</th>
               <th class="text-center">Actions</th>
             </tr>
           </thead>
@@ -37,6 +39,8 @@
               </td>
               <td class="text-center"><%= endpoint.created_at %></td>
               <td class="text-center"><%= endpoint.updated_at %></td>
+              <td class="text-center"><%= endpoint.user.email %></td>
+              <td class="text-center"><%= endpoint.user.email  %></td>
               <td class="text-center">
                 <%= link_to new_endpoint_path, class: "btn btn-success" do %>
                   <i class="fa fa-search-plus "></i>

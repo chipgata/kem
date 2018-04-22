@@ -1,32 +1,80 @@
-<h1>Listing categories</h1>
- 
-<%= link_to 'New category', new_category_path %>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Slug</th>
-    <th>Created At</th>
-    <th>Updated At</th>
-    <th>Created By</th>
-    <th>Updated By</th>
-  </tr>
- 
-  <% @categories.each do |category| %>
-    <tr>
-      <td><%= category.name %></td>
-      <td><%= category.slug %></td>
-      <td><%= category.created_at %></td>
-      <td><%= category.updated_at %></td>
-      <td><%= category.created_by %></td>
-      <td><%= category.updated_by %></td>
-      <td><%= link_to 'Show', category_path(category) %></td>
-     <td><%= link_to 'Edit', edit_category_path(category) %></td>
-     <td><%= link_to 'Destroy', category_path(category),
-              method: :delete,
-              data: { confirm: 'Are you sure?' } %></td>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-align-justify"></i> Categories Management
+      </div>
+      <div class="card-body">
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+          <thead>
+            <tr>
+              <th class="text-center">Parent</th>
+              <th class="text-center">Name</th>
+              <th class="text-center">Description</th>
+              <th class="text-center">Created At</th>
+              <th class="text-center">Updated At</th>
+              <th class="text-center">Created By</th>
+              <th class="text-center">Updated By</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% @categories.each do |category| %>
+            <tr>
+              <td class="text-center"></td>
+              <td class="text-center"><%= category.name %></td>
+              <td class="text-center"><%= category.description %></td>
+              <td class="text-center"><%= category.created_at %></td>
+              <td class="text-center"><%= category.updated_at %></td>
+              <td class="text-center"><%= category.user.email %></td>
+              <td class="text-center"><%= category.user.email  %></td>
+              <td class="text-center">
+                <%= link_to new_category_path, class: "btn btn-success" do %>
+                  <i class="fa fa-search-plus "></i>
+                <% end %>
+                
+                <%= link_to edit_category_path(category), class: "btn btn-info" do %>
+                  <i class="fa fa-edit "></i>
+                <% end %>
+                
+                <%= link_to category_path(category),
+                  method: :delete,
+                  data: { confirm: 'Are you sure?' }, class: "btn btn-danger" do %>
+                  <i class="fa fa-trash-o "></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+        <nav>
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#">Prev</a>
+            </li>
+            <li class="page-item active">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">3</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">4</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <!--/.col-->
+</div>
+<!--/.row-->
 
-    </tr>
-  <% end %>
-</table>
 
 <% content_for :title, "Category Management" %>

@@ -5,6 +5,7 @@ class Base < ApplicationRecord
 
   def update_created_by
     self.created_by = current_user_id
+    self.updated_by = current_user_id
   end
 
   def update_modified_by

@@ -17,24 +17,36 @@
     <link href="/css/style.css" rel="stylesheet">
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed">
     <header class="app-header navbar">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">
-        <img class="navbar-brand-full" src="/img/brand/logo.svg" width="89" height="25" alt="CoreUI Logo">
-        <img class="navbar-brand-minimized" src="/img/brand/sygnet.svg" width="30" height="30" alt="CoreUI Logo">
-      </a>
+      
+      <%= link_to(root_path, class: "navbar-brand", "data-turbolinks": "false") do %>
+        <img class="navbar-brand-full" src="/img/brand/kem-logo.png" width="170" height="120" alt="KEM Logo">
+        <img class="navbar-brand-minimized" src="/img/brand/kem-logo-2.png" width="50" height="50" alt="KEM Logo">
+      <% end %>
       <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
         <span class="navbar-toggler-icon"></span>
       </button>
       <ul class="nav navbar-nav d-md-down-none">
         <li class="nav-item px-3">
-          <a class="nav-link" href="#">Dashboard</a>
+          <%= link_to(root_path, class: "nav-link", "data-turbolinks": "false") do %>
+                 Dashboard
+          <% end %>
         </li>
+        
         <li class="nav-item px-3">
-          <a class="nav-link" href="#">Users</a>
+            <%= link_to(endpoints_path, class: "nav-link", "data-turbolinks": "false") do %>
+            Endpoints
+          <% end %>
+        </li>
+        
+        <li class="nav-item px-3">
+          <%= link_to(categories_path, class: "nav-link", "data-turbolinks": "false") do %>
+            Categories
+          <% end %>
         </li>
         <li class="nav-item px-3">
           <a class="nav-link" href="#">Settings</a>
