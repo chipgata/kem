@@ -1,7 +1,8 @@
 class Endpoint < Base
     belongs_to :category
-    belongs_to :user, :foreign_key => 'created_by', optional: true
-    belongs_to :user, :foreign_key => 'updated_by', optional: true
+    belongs_to :creater, :class_name => 'User', :foreign_key => 'created_by', optional: true
+    belongs_to :updater, :class_name => 'User', :foreign_key => 'updated_by', optional: true
+    #has_many :settings, through: :creater
 
     validates :name, presence: true,
                     length: { minimum: 2 }

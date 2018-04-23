@@ -39,8 +39,8 @@
               </td>
               <td class="text-center"><%= endpoint.created_at %></td>
               <td class="text-center"><%= endpoint.updated_at %></td>
-              <td class="text-center"><%= endpoint.user.email %></td>
-              <td class="text-center"><%= endpoint.user.email  %></td>
+              <td class="text-center"><%= endpoint.creater.email %></td>
+              <td class="text-center"><%= endpoint.updater.email  %></td>
               <td class="text-center">
                 <%= link_to new_endpoint_path, class: "btn btn-success" do %>
                   <i class="fa fa-search-plus "></i>
