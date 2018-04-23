@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'welcome/index'
   resources :categories
   resources :endpoints
+  resources :settings
   get 'endpoints/ping/:id', to: 'endpoints#ping'
   root 'welcome#index'
   mount ActionCable.server => '/cable'

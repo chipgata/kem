@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180422053718) do
+ActiveRecord::Schema.define(version: 20180423065819) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "bases", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -39,7 +42,7 @@ ActiveRecord::Schema.define(version: 20180422053718) do
 
   create_table "crono_jobs", force: :cascade do |t|
     t.string "job_id", null: false
-    t.text "log", limit: 1073741823
+    t.text "log"
     t.datetime "last_performed_at"
     t.boolean "healthy"
     t.datetime "created_at", null: false
@@ -86,6 +89,13 @@ ActiveRecord::Schema.define(version: 20180422053718) do
     t.index ["created_at"], name: "index_event_store_events_in_streams_on_created_at"
     t.index ["stream", "event_id"], name: "index_event_store_events_in_streams_on_stream_and_event_id", unique: true
     t.index ["stream", "position"], name: "index_event_store_events_in_streams_on_stream_and_position", unique: true
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "name"
+    t.jsonb "value"
+    t.integer "created_by"
+    t.integer "updated_by"
   end
 
   create_table "users", force: :cascade do |t|

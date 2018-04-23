@@ -1,0 +1,94 @@
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-align-justify"></i> Settings
+        
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-4">
+            <div class="list-group" id="list-tab" role="tablist">
+              <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="tab" href="#list-home" role="tab" aria-controls="list-home" aria-selected="false">General</a>
+              <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="tab" href="#list-profile" role="tab" aria-controls="list-profile" aria-selected="true">Slack</a>
+              <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="tab" href="#list-messages" role="tab" aria-controls="list-messages">DingTalk</a>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                <p>Comming Soon.</p>
+              </div>
+              <div class="tab-pane fade active show" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                    <div class="card-header ">
+                      <i class="fa fa-edit "></i>Slack Integration
+                      
+                    </div>
+                    <div class="card-body collapse show " id="collapseExample ">
+                      <% if @setting.errors.any? %>
+                        <div id="error_explanation">
+                          <ul>
+                            <% @setting.errors.full_messages.each do |msg| %>
+                              <li><%= msg %></li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      <% end %>
+                      <%= form_with model: @setting, class: "form-horizontal ", local: true do |form| %>
+                        
+                        <div class="form-group ">
+                        
+                
+                          <div class="controls ">
+                            <div class="input-group ">
+                              <%= form.hidden_field :name, id: "appendedInput", class: "form-control ", value: "slack" %>
+                              
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <div class="form-group ">
+                          <%= form.label :web_hook, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+                          <div class="controls ">
+                            <div class="input-prepend input-group ">
+                              <input id="appendedPrependedInput " class="form-control " type="text" value="<%= @slack.presence ? @slack.value['hook'] : '' %>" name="setting[value[hook]]">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group ">
+                          <%= form.label :username, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+                          <div class="controls ">
+                            <div class="input-prepend input-group ">
+                              <input id="appendedPrependedInput " class="form-control " type="text" value="<%= @slack.presence ? @slack.value['username'] : '' %>" name="setting[value[username]]">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group ">
+                          <%= form.label :channel, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+                          <div class="controls ">
+                            <div class="input-prepend input-group ">
+                              <input id="appendedPrependedInput " class="form-control " type="text" value="<%= @slack.presence ? @slack.value['channel'] : '' %>" name="setting[value[channel]]">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-actions ">
+                          <%= form.submit "Save changes", class: "btn btn-primary " %>
+                          <%= link_to 'Cancel', settings_path , class: "btn btn-secondary ", "data-turbolinks": "false" %>
+                        </div>
+                      <% end %>
+                    </div>
+                  
+              </div>
+              <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                <p></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :title, "Settings" %>
