@@ -21,8 +21,7 @@
               </div>
               <div class="tab-pane fade active show" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
                     <div class="card-header ">
-                      <i class="fa fa-edit "></i>Slack Integration
-                      
+                      <i class="fa fa-slack "></i>Slack Integration  
                     </div>
                     <div class="card-body collapse show " id="collapseExample ">
                       <% if @setting.errors.any? %>
@@ -73,14 +72,60 @@
                         </div>
                         <div class="form-actions ">
                           <%= form.submit "Save changes", class: "btn btn-primary " %>
-                          <%= link_to 'Cancel', settings_path , class: "btn btn-secondary ", "data-turbolinks": "false" %>
                         </div>
                       <% end %>
                     </div>
                   
               </div>
               <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
-                <p></p>
+                <div class="card-header ">
+                      <i class="fa fa-edit "></i>DingTalk Integration  
+                    </div>
+                    <div class="card-body collapse show " id="collapseExample ">
+                      <% if @setting.errors.any? %>
+                        <div id="error_explanation">
+                          <ul>
+                            <% @setting.errors.full_messages.each do |msg| %>
+                              <li><%= msg %></li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      <% end %>
+                      <%= form_with model: @setting, class: "form-horizontal ", local: true do |form| %>
+                        
+                        <div class="form-group ">
+                        
+                
+                          <div class="controls ">
+                            <div class="input-group ">
+                              <%= form.hidden_field :name, id: "appendedInput", class: "form-control ", value: "ding" %>
+                              
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <div class="form-group ">
+                          <%= form.label :endpoint, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+                          <div class="controls ">
+                            <div class="input-prepend input-group ">
+                              <input id="appendedPrependedInput " class="form-control " type="text" value="<%= @ding.presence ? @ding.value['endpoint'] : '' %>" name="setting[value[endpoint]]">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group ">
+                          <%= form.label :access_token, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+                          <div class="controls ">
+                            <div class="input-prepend input-group ">
+                              <input id="appendedPrependedInput " class="form-control " type="text" value="<%= @ding.presence ? @ding.value['access_token'] : '' %>" name="setting[value[access_token]]">
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="form-actions ">
+                          <%= form.submit "Save changes", class: "btn btn-primary " %>
+                        </div>
+                      <% end %>
+                    </div>
               </div>
               
             </div>

@@ -1,6 +1,7 @@
 class SettingsController < ApplicationController
     def index
         @slack = Setting.where(name: 'slack').take
+        @ding = Setting.where(name: 'ding').take
         @setting = Setting.new
     end
 

@@ -48,8 +48,11 @@
             Categories
           <% end %>
         </li>
+        
         <li class="nav-item px-3">
-          <a class="nav-link" href="#">Settings</a>
+          <%= link_to(settings_path, class: "nav-link", "data-turbolinks": "false") do %>
+            Settings
+          <% end %>
         </li>
       </ul>
       <ul class="nav navbar-nav ml-auto">
