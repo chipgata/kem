@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180423065819) do
+ActiveRecord::Schema.define(version: 20180424035809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20180423065819) do
     t.string "check_status"
     t.datetime "last_check"
     t.datetime "next_check"
+    t.boolean "enable_notification"
     t.index ["category_id"], name: "index_endpoints_on_category_id"
   end
 

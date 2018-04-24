@@ -114,6 +114,14 @@
                 </div>
               </div>
             </div>
+            <div class="form-group ">
+            <%= form.label :enable_notification, class: "col-form-label " %><br>
+            <label class="switch switch-default switch-primary">
+              <%= form.check_box :enable_notification, class: "switch-input" %>
+              <span class="switch-label"></span>
+              <span class="switch-handle"></span>
+            </label>
+            </div>
             <div class="form-actions ">
               <%= form.submit "Save changes", class: "btn btn-primary " %>
               <%= link_to 'Cancel', endpoints_path , class: "btn btn-secondary ", "data-turbolinks": "false" %>

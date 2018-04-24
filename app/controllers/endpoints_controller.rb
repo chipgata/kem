@@ -15,6 +15,7 @@ class EndpointsController < ApplicationController
     end
 
     def create
+        puts endpoint_params
         @endpoint = Endpoint.new(endpoint_params) 
         if @endpoint.save
             redirect_to endpoints_path
@@ -80,7 +81,8 @@ class EndpointsController < ApplicationController
             :response_timeout,
             :check_interval,
             :unhealthy_threshold,
-            :healthy_threshold
+            :healthy_threshold,
+            :enable_notification
         )
     end
 end
