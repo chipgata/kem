@@ -73,6 +73,7 @@ GEM
     crono (1.1.2)
       activerecord (>= 4.0)
       activesupport (>= 4.0)
+    daemons (1.2.6)
     devise (4.4.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -279,6 +280,7 @@ DEPENDENCIES
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
   crono
+  daemons
   devise
   dingbot
   faraday

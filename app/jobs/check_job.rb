@@ -114,13 +114,15 @@ class CheckJob < ApplicationJob
     check_info = $redis.get "endpoint_check:" + endpoint_id.to_s
     if check_info.nil?
       check_info = { "endpoint_id" => endpoint_id, "check_status"=>'OK', "unhealthy_count" => 0, "healthy_count" => 0 }.to_json
-      $redis.set "endpoint_check:" + endpoint_id.to_s, check_info
+      #$redis.set "endpoint_check:" + endpoint_id.to_s, check_info
+      set_check_info(endpoint_id, check_info)
     end
     JSON.load check_info
   end
 
   def set_check_info(endpoint_id, check_info)
     $redis.set "endpoint_check:" + endpoint_id.to_s, check_info.to_json
+    $redis.expire "endpoint_check:" + endpoint_id.to_s, 1800
   end
 
   def fail_endpoint_store(endpoint)

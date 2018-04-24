@@ -6,12 +6,21 @@ class Endpoint < Base
 
     validates :name, presence: true,
                     length: { minimum: 2 }
-
+    validates :port, :response_timeout, :check_interval, :unhealthy_threshold, :healthy_threshold, presence: true, numericality: { only_integer: true }
+    validates :path, :response_timeout, :check_interval, :unhealthy_threshold, :healthy_threshold, :check_protocol, :status, presence: true
+    
     after_save :clear_cache
-
-    private
+    after_destroy :clear_check, :clear_cache
+    
     def clear_cache
         $redis.del "endpoints"
     end
+
+    def clear_check
+        $redis.del "endpoint_check:#{self.id}"
+        $redis.srem "fail_check_endpoints", self.id
+    end
+
+    private :clear_cache, :clear_check
     
 end
