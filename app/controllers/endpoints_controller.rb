@@ -15,7 +15,8 @@ class EndpointsController < ApplicationController
     end
 
     def create
-        puts endpoint_params
+        #puts endpoint_params
+        
         @endpoint = Endpoint.new(endpoint_params) 
         if @endpoint.save
             redirect_to endpoints_path
