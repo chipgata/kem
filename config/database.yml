@@ -6,13 +6,13 @@
 #
 default: &default
   adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 50 } %>
   timeout: 5000
 
 default2: &default2
   adapter: postgresql
   encoding: unicode
-  pool: 5
+  pool: 50
   
 
 development:

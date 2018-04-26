@@ -2,6 +2,7 @@ class CheckJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
+    @last_msg = ""
     @endpoints = get_endpoint_from_redis
     @endpoints.each do |endpoint|
       check_process(endpoint)
@@ -14,15 +15,13 @@ class CheckJob < ApplicationJob
       Timeout.timeout(timeout) do 
           s = TCPSocket.new(path, port)
           s.close 
+          @last_msg = "Ping OK"
           true
       end
-
-      rescue Errno::ECONNREFUSED => e
-          logger.debug e
-          true
       rescue  => e
-          logger.debug e
-          false
+        @last_msg = e
+        logger.debug e
+        false
     end
   end
 
@@ -36,14 +35,16 @@ class CheckJob < ApplicationJob
 
       response = conn.get('/')
       if response.status == 200
+        @last_msg = "HTTP OK. Code 200"
         true
       else
+        @last_msg = "HTTP FAIL. Code #{response.status}"
         false
       end
 
       rescue  => e
         logger.debug e
-        puts e
+        @last_msg = e
         false
     end
   end
@@ -58,14 +59,16 @@ class CheckJob < ApplicationJob
 
       response = conn.get('/')
       if response.status == 200
+        @last_msg = "HTTPS OK. Code 200"
         true
       else
+        @last_msg = "HTTPS FAIL. Code #{response.status}"
         false
       end
 
       rescue  => e
         logger.debug e
-        puts e
+        @last_msg = e
         false
     end
   end
@@ -73,9 +76,10 @@ class CheckJob < ApplicationJob
   def ssl_check(path, port, timeout)
     valid, error, cert = SSLTest.test "https://" + path + ':' + port.to_s, open_timeout: timeout, read_timeout: timeout
     if valid
+      @last_msg = "SSL OK"
       true
     else
-      puts error
+      @last_msg = error
       false
     end
   end
@@ -105,6 +109,7 @@ class CheckJob < ApplicationJob
       end
       check_info['last_check'] = check_time
       check_info['next_check'] = check_time + endpoint["check_interval"]
+      check_info['last_msg'] = @last_msg
       set_check_info(endpoint["id"], check_info)
       NotifyJob.perform_now
     end
@@ -113,8 +118,7 @@ class CheckJob < ApplicationJob
   def get_check_info(endpoint_id)
     check_info = $redis.get "endpoint_check:" + endpoint_id.to_s
     if check_info.nil?
-      check_info = { "endpoint_id" => endpoint_id, "check_status"=>'OK', "unhealthy_count" => 0, "healthy_count" => 0 }.to_json
-      #$redis.set "endpoint_check:" + endpoint_id.to_s, check_info
+      check_info = { "endpoint_id" => endpoint_id, "check_status"=>'OK', "unhealthy_count" => 0, "healthy_count" => 0, "last_msg" => @last_msg }.to_json
       set_check_info(endpoint_id, check_info)
     end
     JSON.load check_info
