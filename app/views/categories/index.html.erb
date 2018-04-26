@@ -26,8 +26,8 @@
               <td class="text-center"><%= category.description %></td>
               <td class="text-center"><%= category.created_at %></td>
               <td class="text-center"><%= category.updated_at %></td>
-              <td class="text-center"><%= category.user.email %></td>
-              <td class="text-center"><%= category.user.email  %></td>
+              <td class="text-center"><%= category.creater.email %></td>
+              <td class="text-center"><%= category.updater.email  %></td>
               <td class="text-center">
                 <%= link_to new_category_path, class: "btn btn-success" do %>
                   <i class="fa fa-search-plus "></i>
