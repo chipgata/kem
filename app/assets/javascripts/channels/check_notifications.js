@@ -27,6 +27,7 @@ App.cable.subscriptions.create(
                     '<td class="text-center">'+
                     '   <span class="badge badge-danger">FAIL</span>'+
                     '</td>'+
+                    '<td class="text-center">' + check_info['last_msg'] + '</td>'+
                     '<td class="text-center">' + check_info['last_check'] + '</td>'+
                     '<td class="text-center">' + check_info['next_check'] + '</td>'+ 
                 '</tr>';
@@ -39,6 +40,7 @@ App.cable.subscriptions.create(
                           '<th class="text-center">Path</th>'+
                           '<th class="text-center">Port</th>'+
                           '<th class="text-center">Check Status</th>'+
+                          '<th class="text-center">Last Msg</th>'+
                           '<th class="text-center">Last Check</th>'+
                           '<th class="text-center">Next Check</th>'+
                       '</tr>'+

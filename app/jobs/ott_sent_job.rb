@@ -33,7 +33,7 @@ class OttSentJob < ApplicationJob
             },
             {
               "title" => "Last status",
-              "value" => 'can not resolve host',
+              "value" => "#{check_info['last_msg']}",
               "short" => false
             }
           ],
@@ -50,7 +50,7 @@ class OttSentJob < ApplicationJob
       config = get_dingtalk_config(endpoint)
       DingBot.endpoint = config['endpoint']
       DingBot.access_token = config['access_token']
-      msg = "### The endpoint #{endpoint.name} was down\n > **Host**: [#{endpoint.check_protocol}://#{endpoint.path}](#{endpoint.check_protocol}://#{endpoint.path})\n\n > **Port**: #{endpoint.port}\n\n > **Status**: #{check_info['check_status']} \n\n > **Last response**: can not resolve host"
+      msg = "### The endpoint #{endpoint.name} was down\n > **Host**: [#{endpoint.check_protocol}://#{endpoint.path}](#{endpoint.check_protocol}://#{endpoint.path})\n\n > **Port**: #{endpoint.port}\n\n > **Status**: #{check_info['check_status']} \n\n > **Last response**: #{check_info['last_msg']}"
       DingBot.send_markdown("The endpoint #{endpoint.name} was " + check_info['check_status']=='OK' ? "up" : 'down', msg)
     rescue => e
       puts e
