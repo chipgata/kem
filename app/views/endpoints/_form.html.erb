@@ -78,10 +78,18 @@
               <%= form.label :check_protocol, class: "col-form-label " %>
               <div class="controls ">
                 <div class="input-prepend input-group "> 
-                  <%= form.select(:check_protocol, [['PING', 'ping'], ['HTTP', 'http'], ['HTTPS', 'https'], ['SSL', 'ssl']], {}, {:class => "form-control "}) %>
+                  <%= form.select(:check_protocol, [['PING', 'ping'], ['HTTP', 'http'], ['HTTPS', 'https'], ['SSL', 'ssl']], {}, {:class => "form-control ", :id => "endpoint-check-protocol"}) %>
                 </div>
               </div>
             </div>
+            <div id="element-check-extend-code-expect" class="form-group d-none">
+                <%= form.label :http_code_expect, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+                <div class="controls ">
+                  <div class="input-prepend input-group ">
+                    <input class="form-control " type="text" value="<%= @endpoint.check_extend.presence ? @endpoint.check_extend['http_code_expect'] : '' %>" name="endpoint[check_extend[http_code_expect]]" placeholder="200">
+                  </div>
+                </div>
+              </div>
             <div class="form-group ">
               <%= form.label :response_timeout, class: "col-form-label " %><br>
               <div class="controls ">

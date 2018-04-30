@@ -39,9 +39,9 @@
                     <td class="text-center">
                         <span class="badge badge-<%= @color %>"><%= endpoint.check_status %></span>
                     </td>
-                    <td class="text-center"><%= @checks_info[endpoint.id]['last_msg'] %></td>
-                    <td class="text-center"><%= @checks_info[endpoint.id]['last_check'] %></td>
-                    <td class="text-center"><%= @checks_info[endpoint.id]['next_check'] %></td>
+                    <td class="text-center"><%= @checks_info[endpoint.id] ? @checks_info[endpoint.id]['last_msg'] : '' %></td>
+                    <td class="text-center"><%= @checks_info[endpoint.id] ? @checks_info[endpoint.id]['last_check'] : '' %></td>
+                    <td class="text-center"><%= @checks_info[endpoint.id] ? @checks_info[endpoint.id]['next_check'] : '' %></td>
                     
                 </tr>
                 <% end %>

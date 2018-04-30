@@ -15,7 +15,7 @@ class EndpointsController < ApplicationController
     end
 
     def create
-        #puts endpoint_params
+        puts endpoint_params
         
         @endpoint = Endpoint.new(endpoint_params) 
         if @endpoint.save
@@ -70,6 +70,8 @@ class EndpointsController < ApplicationController
 
     private
     def endpoint_params
+        check_extend_params = (params[:endpoint] || {})[:check_extend].keys
+
         params.require(:endpoint).permit(
             :category_id,
             :name, 
@@ -83,7 +85,7 @@ class EndpointsController < ApplicationController
             :check_interval,
             :unhealthy_threshold,
             :healthy_threshold,
-            :enable_notification
+            :enable_notification, check_extend: check_extend_params
         )
     end
 end

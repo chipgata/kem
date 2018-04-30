@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424035809) do
+ActiveRecord::Schema.define(version: 20180427083528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,21 @@ ActiveRecord::Schema.define(version: 20180424035809) do
     t.index ["job_id"], name: "index_crono_jobs_on_job_id", unique: true
   end
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
   create_table "endpoints", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -70,6 +85,7 @@ ActiveRecord::Schema.define(version: 20180424035809) do
     t.datetime "last_check"
     t.datetime "next_check"
     t.boolean "enable_notification"
+    t.jsonb "check_extend"
     t.index ["category_id"], name: "index_endpoints_on_category_id"
   end
 

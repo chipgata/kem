@@ -49,7 +49,6 @@ class SettingsController < ApplicationController
     private
     def setting_params
         value_params = (params[:setting] || {})[:value].keys
-        #puts value_params
         params.require(:setting).permit(:name, value: value_params)
     end
 end

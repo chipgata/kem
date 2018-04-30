@@ -12,6 +12,7 @@
               <th class="text-center">Name</th>
               <th class="text-center">Path</th>
               <th class="text-center">Port</th>
+              <th class="text-center">Check Protocol</th>
               <th class="text-center">Status</th>
               <th class="text-center">Created At</th>
               <th class="text-center">Updated At</th>
@@ -34,6 +35,7 @@
               <td class="text-center"><%= endpoint.name %></td>
               <td class="text-center"><%= endpoint.path %></td>
               <td class="text-center"><%= endpoint.port %></td>
+              <td class="text-center"><%= endpoint.check_protocol.upcase %></td>
               <td class="text-center">
                 <span class="badge badge-<%= @color %>"><%= endpoint.status %></span>
               </td>

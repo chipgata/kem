@@ -10,7 +10,7 @@ class CheckJob < ApplicationJob
     
   end
   
-  def ping_check(path, port, timeout)
+  def ping_check(path, port, timeout, extend={})
     begin
       Timeout.timeout(timeout) do 
           s = TCPSocket.new(path, port)
@@ -20,12 +20,11 @@ class CheckJob < ApplicationJob
       end
       rescue  => e
         @last_msg = e
-        logger.debug e
         false
     end
   end
 
-  def http_check(path, port, timeout)
+  def http_check(path, port, timeout, extend={})
     begin
       conn = Faraday.new 'http://' + path + ':' + port.to_s do |conn|
         conn.options[:open_timeout] = timeout
@@ -34,22 +33,21 @@ class CheckJob < ApplicationJob
       end
 
       response = conn.get('/')
-      if response.status == 200
-        @last_msg = "HTTP OK. Code 200"
+      if response.status == extend['http_code_expect']
+        @last_msg = "HTTP OK. Expected #{extend['http_code_expect']}."
         true
       else
-        @last_msg = "HTTP FAIL. Code #{response.status}"
+        @last_msg = "HTTP FAIL. Expected #{extend['http_code_expect']}. Current #{response.status}."
         false
       end
 
       rescue  => e
-        logger.debug e
         @last_msg = e
         false
     end
   end
 
-  def https_check(path, port, timeout)
+  def https_check(path, port, timeout, extend={})
     begin
       conn = Faraday.new 'https://' + path + ':' + port.to_s do |conn|
         conn.options[:open_timeout] = timeout
@@ -58,22 +56,21 @@ class CheckJob < ApplicationJob
       end
 
       response = conn.get('/')
-      if response.status == 200
-        @last_msg = "HTTPS OK. Code 200"
+      if response.status == extend['http_code_expect']
+        @last_msg = "HTTPS OK. Expected #{extend['http_code_expect']}"
         true
       else
-        @last_msg = "HTTPS FAIL. Code #{response.status}"
+        @last_msg = "HTTPS FAIL. Expected #{extend['http_code_expect']}. Current #{response.status}"
         false
       end
 
       rescue  => e
-        logger.debug e
         @last_msg = e
         false
     end
   end
 
-  def ssl_check(path, port, timeout)
+  def ssl_check(path, port, timeout, extend={})
     valid, error, cert = SSLTest.test "https://" + path + ':' + port.to_s, open_timeout: timeout, read_timeout: timeout
     if valid
       @last_msg = "SSL OK"
@@ -88,7 +85,7 @@ class CheckJob < ApplicationJob
     check_info = get_check_info(endpoint["id"])
     check_time = Time.now;
     if !check_info["last_check"] or (check_time - check_info["last_check"].to_datetime) >= endpoint["check_interval"]
-      if send(endpoint["check_protocol"] + '_check', endpoint["path"], endpoint["port"], endpoint["response_timeout"]) == true
+      if send(endpoint["check_protocol"] + '_check', endpoint["path"], endpoint["port"], endpoint["response_timeout"], endpoint["check_extend"]) == true
         if check_info["check_status"] == 'FAIL' or check_info["check_status"] == 'UNKNOW'
           check_info['healthy_count'] += 1
         end

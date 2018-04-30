@@ -438,6 +438,20 @@
           //console.log(1);
           //$.Sidebar();
       };
+      
+      $(function(){
+        function loadCheckExtendElement() {
+          var checkProtocol = $("#endpoint-check-protocol").val();
+          if( checkProtocol == 'http' || checkProtocol == 'https')
+            $("#element-check-extend-code-expect").removeClass('d-none');
+          else
+            $("#element-check-extend-code-expect").addClass('d-none');
+        }
+        $('#endpoint-check-protocol').on('change', function() {
+            loadCheckExtendElement();
+        });
+        loadCheckExtendElement();
+      });
     </script>
   </body>
 </html>

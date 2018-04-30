@@ -27,6 +27,13 @@ class Endpoint < Base
         self.check_interval   ||= 60
         self.unhealthy_threshold ||= 2
         self.healthy_threshold ||= 3
+        if self.check_protocol == 'http' or self.check_protocol == 'https'
+            if self.check_extend['http_code_expect'].to_i == 0
+                self.check_extend = {"http_code_expect" => 200}
+            else
+                self.check_extend = {"http_code_expect" => self.check_extend['http_code_expect'].to_i}
+            end
+        end
     end
 
     private :clear_cache, :clear_check, :default_values
