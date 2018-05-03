@@ -4,6 +4,7 @@ class OttSentJob < ApplicationJob
   self.queue_adapter = :resque
 
   def perform(endpoint, check_info)
+    puts 'test'
     slack(endpoint, check_info)
     ding_talk(endpoint, check_info)
   end
@@ -50,7 +51,7 @@ class OttSentJob < ApplicationJob
       config = get_dingtalk_config(endpoint)
       DingBot.endpoint = config['endpoint']
       DingBot.access_token = config['access_token']
-      msg = "### The endpoint #{endpoint.name} was down\n > **Host**: [#{endpoint.check_protocol}://#{endpoint.path}](#{endpoint.check_protocol}://#{endpoint.path})\n\n > **Port**: #{endpoint.port}\n\n > **Status**: #{check_info['check_status']} \n\n > **Last response**: #{check_info['last_msg']}"
+      msg = "### The endpoint #{endpoint.name} was #{check_info['check_status']=='OK' ? 'up' : 'down'}\n > **Host**: [#{endpoint.check_protocol}://#{endpoint.path}](#{endpoint.check_protocol}://#{endpoint.path})\n\n > **Port**: #{endpoint.port}\n\n > **Status**: #{check_info['check_status']} \n\n > **Last response**: #{check_info['last_msg']}"
       DingBot.send_markdown("The endpoint #{endpoint.name} was " + check_info['check_status']=='OK' ? "up" : 'down', msg)
     rescue => e
       puts e

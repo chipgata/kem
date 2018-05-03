@@ -85,22 +85,29 @@ class CheckJob < ApplicationJob
     check_info = get_check_info(endpoint["id"])
     check_time = Time.now;
     if !check_info["last_check"] or (check_time - check_info["last_check"].to_datetime) >= endpoint["check_interval"]
-      if send(endpoint["check_protocol"] + '_check', endpoint["path"], endpoint["port"], endpoint["response_timeout"], endpoint["check_extend"]) == true
+      if send(endpoint["check_protocol"] + '_check', endpoint["path"], endpoint["port"], endpoint["response_timeout"], endpoint["check_extend"])
         if check_info["check_status"] == 'FAIL' or check_info["check_status"] == 'UNKNOW'
           check_info['healthy_count'] += 1
         end
-        if check_info['healthy_count'] >= endpoint["healthy_threshold"]
+        if check_info['healthy_count'].to_i >= endpoint["healthy_threshold"].to_i
           check_info["check_status"] = 'OK'
           check_info['unhealthy_count'] = 0
+          check_info['is_notified'] = 0
+        end
+        if check_info["check_status"] == 'OK' and exist_endpoint_store(endpoint)
+          e = Endpoint.find(endpoint['id'])
+          OttSentJob.perform_later(e, check_info)
           fail_endpoint_remove(endpoint)
         end
       else
         if check_info["check_status"] == 'OK'
           check_info['unhealthy_count'] += 1
         end
-        if check_info['unhealthy_count'] >= endpoint["unhealthy_threshold"]
+        if check_info['unhealthy_count'].to_i >= endpoint["unhealthy_threshold"].to_i
           check_info["check_status"] = 'FAIL'
           check_info['healthy_count'] = 0
+        end
+        if check_info["check_status"] == 'FAIL' and !exist_endpoint_store(endpoint)
           fail_endpoint_store(endpoint)
         end
       end
@@ -115,15 +122,14 @@ class CheckJob < ApplicationJob
   def get_check_info(endpoint_id)
     check_info = $redis.get "endpoint_check:" + endpoint_id.to_s
     if check_info.nil?
-      check_info = { "endpoint_id" => endpoint_id, "check_status"=>'OK', "unhealthy_count" => 0, "healthy_count" => 0, "last_msg" => @last_msg }.to_json
+      check_info = { "endpoint_id" => endpoint_id, "check_status"=>'OK', "unhealthy_count" => 0, "healthy_count" => 0, "last_msg" => @last_msg, "is_notified" => 0 }.to_json
       set_check_info(endpoint_id, check_info)
     end
     JSON.load check_info
   end
 
-  def set_check_info(endpoint_id, check_info)
-    $redis.set "endpoint_check:" + endpoint_id.to_s, check_info.to_json
-    $redis.expire "endpoint_check:" + endpoint_id.to_s, 1800
+  def exist_endpoint_store(endpoint)
+    $redis.sismember "fail_check_endpoints", endpoint['id']
   end
 
   def fail_endpoint_store(endpoint)
@@ -150,6 +156,6 @@ class CheckJob < ApplicationJob
     endpoints
   end
 
-  private :ping_check, :http_check, :https_check, :ssl_check, :check_process, :get_check_info, :set_check_info, :get_endpoint_from_redis, :fail_endpoint_store, :fail_endpoint_remove
+  private :ping_check, :http_check, :https_check, :ssl_check, :check_process, :get_check_info, :get_endpoint_from_redis, :fail_endpoint_store, :fail_endpoint_remove
 
 end
