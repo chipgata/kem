@@ -1,6 +1,7 @@
 class ProfilesController < ApplicationController
 
     def index
+        @user = current_user
         if !current_user.profile
           Profile.create(:first_name => '', :last_name => '', :avatar => '', :user_id => current_user.id)
         end
@@ -43,9 +44,26 @@ class ProfilesController < ApplicationController
       end
     end
 
+    def update_password
+      @profile = current_user.profile
+      @user = current_user
+      #if @user.update(user_params)
+      if @user.update_with_password(user_params)
+        # Sign in the user by passing validation in case their password changed
+        bypass_sign_in(@user)
+        redirect_to profiles_path
+      else
+        render "index"
+      end
+    end
+
     private
     def profile_params
         params.require(:profile).permit(:first_name, :last_name, :picture)
+    end
+
+    def user_params
+      params.require(:user).permit(:password, :password_confirmation, :current_password)
     end
     
 end

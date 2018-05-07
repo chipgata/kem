@@ -81,9 +81,9 @@
               <strong>Account</strong>
             </div>
             
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" data-turbolinks="false" href="/profiles">
               <i class="fa fa-user"></i> Profile</a>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" data-turbolinks="false" href="/settings">
               <i class="fa fa-wrench"></i> Settings</a>
             <%= link_to(destroy_user_session_path, method: :delete, class: "dropdown-item") do %>
                 <i class="fa fa-lock"></i> Logout
