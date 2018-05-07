@@ -49,21 +49,22 @@ class CheckJob < ApplicationJob
 
   def https_check(path, port, timeout, extend={})
     begin
-      conn = Faraday.new 'https://' + path + ':' + port.to_s do |conn|
-        conn.options[:open_timeout] = timeout
-        conn.options[:timeout] = timeout
-        conn.adapter Faraday.default_adapter
-      end
+      if ssl_cert_expiry(path, port)
+        conn = Faraday.new 'https://' + path + ':' + port.to_s do |conn|
+          conn.options[:open_timeout] = timeout
+          conn.options[:timeout] = timeout
+          conn.adapter Faraday.default_adapter
+        end
 
-      response = conn.get('/')
-      if response.status == extend['http_code_expect']
-        @last_msg = "HTTPS OK. Expected #{extend['http_code_expect']}"
-        true
-      else
-        @last_msg = "HTTPS FAIL. Expected #{extend['http_code_expect']}. Current #{response.status}"
-        false
+        response = conn.get('/')
+        if response.status == extend['http_code_expect']
+          @last_msg = "HTTPS OK. Expected #{extend['http_code_expect']}"
+          true
+        else
+          @last_msg = "HTTPS FAIL. Expected #{extend['http_code_expect']}. Current #{response.status}"
+          false
+        end
       end
-
       rescue  => e
         @last_msg = e
         false
@@ -78,6 +79,24 @@ class CheckJob < ApplicationJob
     else
       @last_msg = error
       false
+    end
+  end
+
+  def ssl_cert_expiry(path, port)
+    expiry = `openssl s_client -servername #{path} -connect #{path}:#{port} < /dev/null 2>&1 | openssl x509 -enddate -noout`.split('=').last
+    days_until = (Date.parse(expiry.to_s) - Date.today).to_i
+    if days_until < 0
+      @last_msg = "Critical. The certificate expired #{days_until.abs} days ago"
+      false
+    elsif days_until < 10
+      @last_msg = "Critical. The certificate will expire #{days_until} days left"
+      false
+    elsif days_until < 30
+      @last_msg = "Warning. The certificate will expire #{days_until} days left"
+      false
+    else
+      @last_msg = "OK. #{days_until} days left"
+      true
     end
   end
 
@@ -156,6 +175,6 @@ class CheckJob < ApplicationJob
     endpoints
   end
 
-  private :ping_check, :http_check, :https_check, :ssl_check, :check_process, :get_check_info, :get_endpoint_from_redis, :fail_endpoint_store, :fail_endpoint_remove
+  private :ping_check, :http_check, :https_check, :ssl_check, :ssl_cert_expiry, :check_process, :get_check_info, :get_endpoint_from_redis, :fail_endpoint_store, :fail_endpoint_remove
 
 end
