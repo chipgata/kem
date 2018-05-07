@@ -52,7 +52,7 @@
                           <%= form.label :avatar, class: "col-form-label ", for: "appendedPrependedInput " %><br>
                           <div class="controls ">
                             <div class="input-prepend input-group ">
-                              <img src="<%= @profile.avatar %>" alt="Smiley face" height="100" width="100">
+                              <img src="<%= @profile.avatar ? @profile.avatar : "" %>" alt="Smiley face" height="100" width="100">
                                <%= form.file_field :picture %>
                             </div>
                           </div>
