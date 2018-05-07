@@ -27,3 +27,4 @@ package-lock.json
 /resque.pid
 /Gemfile.lock
 Gemfile.lock
+public/uploads
