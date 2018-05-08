@@ -20,7 +20,7 @@ class OttSentJob < ApplicationJob
       a_ok_note = {
         pretext: "The endpoint #{endpoint.name} was #{check_info['check_status']=='OK' ? 'up' : 'down'}",
         text: "",
-        color: check_info['check_status']=='FAIL' ? "danger" : 'good',
+        color: check_info['check_status']=='OK' ? "good" : 'danger',
         fields: [
             {
                 "title" => "Host",
