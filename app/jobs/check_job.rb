@@ -19,6 +19,7 @@ class CheckJob < ApplicationJob
           'OK'
       end
       rescue  => e
+        puts e
         @last_msg = e
         'CRITICAL'
     end
@@ -35,7 +36,7 @@ class CheckJob < ApplicationJob
       response = conn.get('/')
       if response.status == extend['http_code_expect']
         @last_msg = "HTTP OK. Expected #{extend['http_code_expect']}."
-        if extend['http_body_include'] and response.status == 200
+        if !extend['http_body_include'].empty? and response.status == 200
           http_body_check(response.body, extend['http_body_include']) 
         else
           'OK'
@@ -46,6 +47,7 @@ class CheckJob < ApplicationJob
       end
 
       rescue  => e
+        puts e
         @last_msg = e
         'CRITICAL'
     end
@@ -63,7 +65,7 @@ class CheckJob < ApplicationJob
         response = conn.get('/')
         if response.status == extend['http_code_expect']
           @last_msg = "HTTPS OK. Expected #{extend['http_code_expect']}"
-          if extend['http_body_include'] and response.status == 200
+          if !extend['http_body_include'].empty? and response.status == 200
             http_body_check(response.body, extend['http_body_include']) 
           else
             'OK'
@@ -74,6 +76,7 @@ class CheckJob < ApplicationJob
         end
       end
       rescue  => e
+        puts e
         @last_msg = e
         'CRITICAL'
     end
@@ -109,6 +112,7 @@ class CheckJob < ApplicationJob
         'OK'
       end
       rescue  => e
+        puts e
         @last_msg = e
         'CRITICAL'
     end
@@ -125,6 +129,7 @@ class CheckJob < ApplicationJob
         'WARNING'
       end
       rescue  => e
+        puts e
         @last_msg = e
         'WARNING'
     end
