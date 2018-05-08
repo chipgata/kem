@@ -91,8 +91,10 @@ class CheckJob < ApplicationJob
   end
 
   def ssl_cert_expiry(path, port)
+    host = URI.parse( "https://#{path}" ).host
+    puts host
     begin
-      expiry = `openssl s_client -servername #{path} -connect #{path}:#{port} < /dev/null 2>&1 | openssl x509 -enddate -noout`.split('=').last
+      expiry = `openssl s_client -servername #{host} -connect #{host}:#{port} < /dev/null 2>&1 | openssl x509 -enddate -noout`.split('=').last
       days_until = (Date.parse(expiry.to_s) - Date.today).to_i
       if days_until < 0
         @last_msg = "Critical. The certificate expired #{days_until.abs} days ago"
