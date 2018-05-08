@@ -35,7 +35,11 @@ class CheckJob < ApplicationJob
       response = conn.get('/')
       if response.status == extend['http_code_expect']
         @last_msg = "HTTP OK. Expected #{extend['http_code_expect']}."
-        true
+        if extend['http_body_include'] and response.status == 200
+          http_body_check(response.body, extend['http_body_include']) 
+        else
+          true
+        end
       else
         @last_msg = "HTTP FAIL. Expected #{extend['http_code_expect']}. Current #{response.status}."
         false
@@ -59,7 +63,11 @@ class CheckJob < ApplicationJob
         response = conn.get('/')
         if response.status == extend['http_code_expect']
           @last_msg = "HTTPS OK. Expected #{extend['http_code_expect']}"
-          true
+          if extend['http_body_include'] and response.status == 200
+            http_body_check(response.body, extend['http_body_include']) 
+          else
+            true
+          end
         else
           @last_msg = "HTTPS FAIL. Expected #{extend['http_code_expect']}. Current #{response.status}"
           false
@@ -97,6 +105,17 @@ class CheckJob < ApplicationJob
     else
       @last_msg = "OK. #{days_until} days left"
       true
+    end
+  end
+
+  def http_body_check(html, pattern)
+    page = Nokogiri::HTML(html)
+    if page.at_css(pattern)
+      @last_msg = "OK. The element #{pattern} found on page."
+      true
+    else
+      @last_msg = "Warning. The element #{pattern} can not find on page."
+      false
     end
   end
 

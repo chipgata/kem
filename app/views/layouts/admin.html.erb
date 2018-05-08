@@ -442,10 +442,14 @@
       $(function(){
         function loadCheckExtendElement() {
           var checkProtocol = $("#endpoint-check-protocol").val();
-          if( checkProtocol == 'http' || checkProtocol == 'https')
+          if( checkProtocol == 'http' || checkProtocol == 'https') {
             $("#element-check-extend-code-expect").removeClass('d-none');
-          else
+            $("#element-check-extend-body-include").removeClass('d-none');
+          }
+          else {
             $("#element-check-extend-code-expect").addClass('d-none');
+            $("#element-check-extend-body-include").addClass('d-none');
+          }
         }
         $('#endpoint-check-protocol').on('change', function() {
             loadCheckExtendElement();

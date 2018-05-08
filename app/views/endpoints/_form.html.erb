@@ -48,23 +48,24 @@
                 </div>
               </div>
             </div>
-            <div class="form-group ">
-              <%= form.label :path, class: "col-form-label " %><br>
-              <div class="controls ">
-                <div class="input-group ">
-                  <%= form.text_field :path, class: "form-control " %>
+            <div class="row">
+              <div class="form-group col-sm-6">
+                <%= form.label :path, class: "col-form-label " %><br>
+                <div class="controls ">
+                  <div class="input-group ">
+                    <%= form.text_field :path, class: "form-control " %>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-sm-6">
+                <%= form.label :port, class: "col-form-label " %><br>
+                <div class="controls ">
+                  <div class="input-group ">
+                    <%= form.text_field :port, class: "form-control " %>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="form-group ">
-              <%= form.label :port, class: "col-form-label " %><br>
-              <div class="controls ">
-                <div class="input-group ">
-                  <%= form.text_field :port, class: "form-control " %>
-                </div>
-              </div>
-            </div>
-
             <div class="form-group ">
               <%= form.label :status, class: "col-form-label ", for: "prependedInput" %>
               <div class="controls ">
@@ -82,43 +83,57 @@
                 </div>
               </div>
             </div>
-            <div id="element-check-extend-code-expect" class="form-group d-none">
-                <%= form.label :http_code_expect, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+            <div class="row">
+              <div id="element-check-extend-code-expect" class="form-group col-sm-6 d-none">
+                  <%= form.label :http_code_expect, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+                  <div class="controls ">
+                    <div class="input-prepend input-group ">
+                      <input class="form-control " type="text" value="<%= @endpoint.check_extend.presence ? @endpoint.check_extend['http_code_expect'] : '' %>" name="endpoint[check_extend[http_code_expect]]" placeholder="200">
+                    </div>
+                  </div>
+              </div>
+              <div id="element-check-extend-body-include" class="form-group col-sm-6 d-none">
+                  <%= form.label :http_body_include, class: "col-form-label ", for: "appendedPrependedInput " %><br>
+                  <div class="controls ">
+                    <div class="input-prepend input-group ">
+                      <input class="form-control " type="text" value="<%= @endpoint.check_extend.presence ? @endpoint.check_extend['http_body_include'] : '' %>" name="endpoint[check_extend[http_body_include]]" placeholder=".login">
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-6">
+                <%= form.label :check_timeout, class: "col-form-label " %><br>
                 <div class="controls ">
-                  <div class="input-prepend input-group ">
-                    <input class="form-control " type="text" value="<%= @endpoint.check_extend.presence ? @endpoint.check_extend['http_code_expect'] : '' %>" name="endpoint[check_extend[http_code_expect]]" placeholder="200">
+                  <div class="input-group ">
+                    <%= form.text_field :response_timeout, placeholder: 10, class: "form-control " %>
                   </div>
                 </div>
               </div>
-            <div class="form-group ">
-              <%= form.label :response_timeout, class: "col-form-label " %><br>
-              <div class="controls ">
-                <div class="input-group ">
-                  <%= form.text_field :response_timeout, placeholder: 10, class: "form-control " %>
+              <div class="form-group col-sm-6">
+                <%= form.label :check_interval, class: "col-form-label " %><br>
+                <div class="controls ">
+                  <div class="input-group ">
+                    <%= form.text_field :check_interval, placeholder: 60, class: "form-control " %>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group ">
-              <%= form.label :check_interval, class: "col-form-label " %><br>
-              <div class="controls ">
-                <div class="input-group ">
-                  <%= form.text_field :check_interval, placeholder: 60, class: "form-control " %>
+            </div>  
+            <div class="row">
+              <div class="form-group col-sm-6">
+                <%= form.label :unhealthy_threshold, class: "col-form-label " %><br>
+                <div class="controls ">
+                  <div class="input-group ">
+                    <%= form.text_field :unhealthy_threshold, placeholder: 2, class: "form-control " %>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group ">
-              <%= form.label :unhealthy_threshold, class: "col-form-label " %><br>
-              <div class="controls ">
-                <div class="input-group ">
-                  <%= form.text_field :unhealthy_threshold, placeholder: 2, class: "form-control " %>
-                </div>
-              </div>
-            </div>
-            <div class="form-group ">
-              <%= form.label :healthy_threshold, class: "col-form-label " %><br>
-              <div class="controls ">
-                <div class="input-group ">
-                  <%= form.text_field :healthy_threshold, placeholder: 3, class: "form-control " %>
+              <div class="form-group col-sm-6">
+                <%= form.label :healthy_threshold, class: "col-form-label " %><br>
+                <div class="controls ">
+                  <div class="input-group ">
+                    <%= form.text_field :healthy_threshold, placeholder: 3, class: "form-control " %>
+                  </div>
                 </div>
               </div>
             </div>

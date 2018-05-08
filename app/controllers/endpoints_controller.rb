@@ -27,7 +27,7 @@ class EndpointsController < ApplicationController
 
     def update
         @endpoint = Endpoint.find(params[:id])
-       
+        
         if @endpoint.update(endpoint_params)
           redirect_to endpoints_path
         else
@@ -44,28 +44,6 @@ class EndpointsController < ApplicationController
         @endpoint = Endpoint.find(params[:id])
         @endpoint.destroy
         redirect_to endpoints_path
-    end
-
-    def ping
-        @endpoint = Endpoint.find(params[:id])
-        resp = {'code' => 0, 'msg' => 'check fail', 'data' => @endpoint}
-        begin
-            Timeout.timeout(@endpoint.response_timeout) do 
-                s = TCPSocket.new(@endpoint.path, @endpoint.port)
-                s.close 
-                resp['code'] = 1
-                resp['msg'] = 'check ok'
-            end
-
-            rescue Errno::ECONNREFUSED => e
-                print e
-                resp['code'] = 1
-                resp['msg'] = 'check ok'
-            rescue  => e
-                print e
-        end
-
-        render json: resp
     end
 
     private
