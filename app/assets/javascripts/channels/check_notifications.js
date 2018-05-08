@@ -20,12 +20,20 @@ App.cable.subscriptions.create(
       if(data.endpoints.length != 0) {
         data.endpoints.forEach(function(endpoint) {
           var check_info = data.checks_info[endpoint.id]
+          var color = 'success';
+          if(check_info['check_status'] == 'CRITICAL')
+            color = 'danger'
+          else if(check_info['check_status'] == 'WARNING')
+            color = 'warning'
+          else if(check_info['check_status'] == 'UNKNOWN')
+            color = 'primary'
+
           rows += '<tr>'+
                     '<td class="text-center">'+ endpoint.name +'</td>'+
                     '<td class="text-center">'+ endpoint.path +'</td>'+
                     '<td class="text-center">'+ endpoint.port +'</td>'+
                     '<td class="text-center">'+
-                    '   <span class="badge badge-danger">FAIL</span>'+
+                    '   <span class="badge badge-'+ color +'">'+ check_info['check_status'] +'</span>'+
                     '</td>'+
                     '<td class="text-center">' + check_info['last_msg'] + '</td>'+
                     '<td class="text-center">' + check_info['last_check'] + '</td>'+

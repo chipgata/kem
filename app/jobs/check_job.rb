@@ -16,11 +16,11 @@ class CheckJob < ApplicationJob
           s = TCPSocket.new(path, port)
           s.close 
           @last_msg = "Ping OK"
-          true
+          'OK'
       end
       rescue  => e
         @last_msg = e
-        false
+        'CRITICAL'
     end
   end
 
@@ -38,16 +38,16 @@ class CheckJob < ApplicationJob
         if extend['http_body_include'] and response.status == 200
           http_body_check(response.body, extend['http_body_include']) 
         else
-          true
+          'OK'
         end
       else
-        @last_msg = "HTTP FAIL. Expected #{extend['http_code_expect']}. Current #{response.status}."
-        false
+        @last_msg = "HTTP CRITICAL. Expected #{extend['http_code_expect']}. Current #{response.status}."
+        'CRITICAL'
       end
 
       rescue  => e
         @last_msg = e
-        false
+        'CRITICAL'
     end
   end
 
@@ -66,16 +66,16 @@ class CheckJob < ApplicationJob
           if extend['http_body_include'] and response.status == 200
             http_body_check(response.body, extend['http_body_include']) 
           else
-            true
+            'OK'
           end
         else
-          @last_msg = "HTTPS FAIL. Expected #{extend['http_code_expect']}. Current #{response.status}"
-          false
+          @last_msg = "HTTPS CRITICAL. Expected #{extend['http_code_expect']}. Current #{response.status}"
+          'CRITICAL'
         end
       end
       rescue  => e
         @last_msg = e
-        false
+        'CRITICAL'
     end
   end
 
@@ -83,48 +83,61 @@ class CheckJob < ApplicationJob
     valid, error, cert = SSLTest.test "https://" + path + ':' + port.to_s, open_timeout: timeout, read_timeout: timeout
     if valid
       @last_msg = "SSL OK"
-      true
+      'OK'
     else
       @last_msg = error
-      false
+      'CRITICAL'
     end
   end
 
   def ssl_cert_expiry(path, port)
-    expiry = `openssl s_client -servername #{path} -connect #{path}:#{port} < /dev/null 2>&1 | openssl x509 -enddate -noout`.split('=').last
-    days_until = (Date.parse(expiry.to_s) - Date.today).to_i
-    if days_until < 0
-      @last_msg = "Critical. The certificate expired #{days_until.abs} days ago"
-      false
-    elsif days_until < 10
-      @last_msg = "Critical. The certificate will expire #{days_until} days left"
-      false
-    elsif days_until < 30
-      @last_msg = "Warning. The certificate will expire #{days_until} days left"
-      false
-    else
-      @last_msg = "OK. #{days_until} days left"
-      true
+    begin
+      expiry = `openssl s_client -servername #{path} -connect #{path}:#{port} < /dev/null 2>&1 | openssl x509 -enddate -noout`.split('=').last
+      days_until = (Date.parse(expiry.to_s) - Date.today).to_i
+      if days_until < 0
+        @last_msg = "Critical. The certificate expired #{days_until.abs} days ago"
+        'CRITICAL'
+      elsif days_until < 10
+        @last_msg = "Critical. The certificate will expire #{days_until} days left"
+        'CRITICAL'
+      elsif days_until < 30
+        @last_msg = "Warning. The certificate will expire #{days_until} days left"
+        'WARNING'
+      else
+        @last_msg = "OK. #{days_until} days left"
+        'OK'
+      end
+      rescue  => e
+        @last_msg = e
+        'CRITICAL'
     end
   end
 
   def http_body_check(html, pattern)
+    begin
     page = Nokogiri::HTML(html)
-    if page.at_css(pattern)
-      @last_msg = "OK. The element #{pattern} found on page."
-      true
-    else
-      @last_msg = "Warning. The element #{pattern} can not find on page."
-      false
+      if page.at_css(pattern)
+        @last_msg = "OK. The element #{pattern} found on page."
+        'OK'
+      else
+        @last_msg = "Warning. The element #{pattern} can not find on page."
+        'WARNING'
+      end
+      rescue  => e
+        @last_msg = e
+        'WARNING'
     end
   end
 
   def check_process(endpoint)
     check_info = get_check_info(endpoint["id"])
     check_time = Time.now;
+    fails_status = ['CRITICAL', 'UNKNOWN', 'WARNING']
+
     if !check_info["last_check"] or (check_time - check_info["last_check"].to_datetime) >= endpoint["check_interval"]
-      if send(endpoint["check_protocol"] + '_check', endpoint["path"], endpoint["port"], endpoint["response_timeout"], endpoint["check_extend"])
-        if check_info["check_status"] == 'FAIL' or check_info["check_status"] == 'UNKNOW'
+      check_status = send(endpoint["check_protocol"] + '_check', endpoint["path"], endpoint["port"], endpoint["response_timeout"], endpoint["check_extend"])
+      if check_status == 'OK'
+        if fails_status.include? check_info["check_status"] 
           check_info['healthy_count'] += 1
         end
         if check_info['healthy_count'].to_i >= endpoint["healthy_threshold"].to_i
@@ -142,15 +155,15 @@ class CheckJob < ApplicationJob
           check_info['unhealthy_count'] += 1
         end
         if check_info['unhealthy_count'].to_i >= endpoint["unhealthy_threshold"].to_i
-          check_info["check_status"] = 'FAIL'
+          check_info["check_status"] = check_status
           check_info['healthy_count'] = 0
         end
-        if check_info["check_status"] == 'FAIL' and !exist_endpoint_store(endpoint)
+        if fails_status.include? check_info["check_status"] and !exist_endpoint_store(endpoint)
           fail_endpoint_store(endpoint)
         end
       end
-      check_info['last_check'] = check_time
-      check_info['next_check'] = check_time + endpoint["check_interval"]
+      check_info['last_check'] = check_time.to_s
+      check_info['next_check'] = (check_time + endpoint["check_interval"]).to_s
       check_info['last_msg'] = @last_msg
       set_check_info(endpoint["id"], check_info)
       NotifyJob.perform_now

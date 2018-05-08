@@ -22,22 +22,24 @@
                 </thead>
                 <tbody>
                 <% @endpoints.each do |endpoint| %>
-                <% endpoint.check_status = 'FAIL' %>
-                <% if endpoint.check_status == 'OK' %>
+                <% if @checks_info[endpoint.id]['check_status'] == 'OK' %>
                 <% @color = 'success' %>
                 <% end %>
-                <% if endpoint.check_status == 'FAIL' %>
+                <% if @checks_info[endpoint.id]['check_status'] == 'CRITICAL' %>
                 <% @color = 'danger' %>
                 <% end %>
-                <% if endpoint.check_status == 'UNKNOW' %>
+                <% if @checks_info[endpoint.id]['check_status'] == 'WARNING' %>
                 <% @color = 'warning' %>
+                <% end %>
+                <% if @checks_info[endpoint.id]['check_status'] == 'UNKNOWN' %>
+                <% @color = 'primary' %>
                 <% end %>
                 <tr>
                     <td class="text-center"><%= endpoint.name %></td>
                     <td class="text-center"><%= endpoint.path %></td>
                     <td class="text-center"><%= endpoint.port %></td>
                     <td class="text-center">
-                        <span class="badge badge-<%= @color %>"><%= endpoint.check_status %></span>
+                        <span class="badge badge-<%= @color %>"><%= @checks_info[endpoint.id]['check_status'] %></span>
                     </td>
                     <td class="text-center"><%= @checks_info[endpoint.id] ? @checks_info[endpoint.id]['last_msg'] : '' %></td>
                     <td class="text-center"><%= @checks_info[endpoint.id] ? @checks_info[endpoint.id]['last_check'] : '' %></td>
