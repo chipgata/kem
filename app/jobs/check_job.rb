@@ -168,8 +168,8 @@ class CheckJob < ApplicationJob
           fail_endpoint_store(endpoint)
         end
       end
-      check_info['last_check'] = check_time.to_s
-      check_info['next_check'] = (check_time + endpoint["check_interval"]).to_s
+      check_info['last_check'] = check_time
+      check_info['next_check'] = check_time + endpoint["check_interval"]
       check_info['last_msg'] = @last_msg
       set_check_info(endpoint["id"], check_info)
       NotifyJob.perform_now
